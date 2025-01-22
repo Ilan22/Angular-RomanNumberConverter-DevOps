@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s # Intervalle global pour scrapper les métriques
+
+scrape_configs:
+  - job_name: "angular-backend"
+    static_configs:
+      - targets: ["angular-backend:4200"]
+
+  # Configuration pour scrapper des métriques système (si applicable)
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"] # Scrapper Prometheus lui-même
