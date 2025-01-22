@@ -13,4 +13,14 @@ module.exports = {
     '@core/(.*)': '<rootDir>/src/app/core/$1',
     '@env': '<rootDir>/src/environments/environment',
   },
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'test-results',
+        outputName: 'junit.xml',
+      },
+    ],
+  ],
 };
