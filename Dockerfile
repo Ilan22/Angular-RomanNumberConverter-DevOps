@@ -1,25 +1,21 @@
-# Build stage
-FROM node:20-alpine as build
+FROM node:20-alpine
+
 WORKDIR /app
+
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
+
+# Copy package files
 COPY package*.json ./
-RUN npm ci
+
+# Install dependencies
+RUN npm install
+
+# Copy project files
 COPY . .
-RUN npm run build
-# Debug: Afficher le contenu du dossier dist
-RUN ls -la dist/
 
-# Production stage
-FROM nginx:alpine
+# Expose port 4200
+EXPOSE 4200
 
-# Copier les fichiers
-COPY --from=build /app/dist/* /usr/share/nginx/html/
-# Debug: Vérifier le contenu du dossier nginx
-RUN ls -la /usr/share/nginx/html/
-
-# Ajouter une configuration nginx personnalisée
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-COPY --from=build /app/dist/roman-numbers /usr/share/nginx/html
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Start the app with ng serve, allowing external connections
+CMD ["ng", "serve", "--host", "0.0.0.0"]
